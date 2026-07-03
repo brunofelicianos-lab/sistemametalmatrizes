@@ -764,18 +764,49 @@ try{
   console.error('Erro ao inicializar o Firebase (initializeApp/firestore/auth)', e);
   firebaseInitError = e;
 }
+let currentUser = null;
+
 async function ensureAuth(){
   if(firebaseInitError) throw firebaseInitError;
-  try{ await fbAuth.setPersistence(firebase.auth.Auth.Persistence.NONE); }
-  catch(e){ console.warn('Não foi possível definir persistência NONE no Auth', e); }
-  if(!fbAuth.currentUser){
-    await fbAuth.signInAnonymously();
-  }
-  return new Promise((resolve, reject)=>{
+  // Mantém a sessão entre recarregamentos (LOCAL). Assim o operador não precisa
+  // logar toda hora, mas ainda exige uma conta de verdade.
+  try{ await fbAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }
+  catch(e){ console.warn('Não foi possível definir persistência LOCAL no Auth', e); }
+  return new Promise((resolve)=>{
     const unsub = fbAuth.onAuthStateChanged(user=>{
-      if(user){ unsub(); resolve(user); }
-    }, err=>{ unsub(); reject(err); });
+      unsub();
+      resolve(user || null);
+    }, ()=>{ unsub(); resolve(null); });
   });
+}
+
+// Lê o papel do usuário logado no Firestore (coleção "usuarios", doc = uid).
+// Se o doc tiver { role: "admin" } o usuário é administrador.
+async function loadUserRole(user){
+  isAdmin = false;
+  if(!user) return;
+  try{
+    const snap = await db.collection('usuarios').doc(user.uid).get();
+    if(snap.exists && snap.data() && snap.data().role === 'admin'){
+      isAdmin = true;
+    }
+  }catch(e){
+    console.warn('Não foi possível ler o papel do usuário', e);
+  }
+}
+
+function traduzErroAuth(e){
+  const code = (e && e.code) || '';
+  switch(code){
+    case 'auth/invalid-email': return 'E-mail inválido.';
+    case 'auth/user-disabled': return 'Este usuário foi desativado.';
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+    case 'auth/invalid-credential': return 'E-mail ou senha incorretos.';
+    case 'auth/too-many-requests': return 'Muitas tentativas. Aguarde um pouco e tente novamente.';
+    case 'auth/network-request-failed': return 'Falha de conexão. Verifique a internet.';
+    default: return (e && e.message) || 'Não foi possível entrar.';
+  }
 }
 </script>
 <script>
@@ -806,7 +837,6 @@ const PANEL_VIEWS = {
 let currentPanelView = 'todos';
 let expandedGroups = new Set();
 let isAdmin = false;
-const ADMIN_PASSWORD = 'Antena1@';
 
 let clientes = [];
 let editingClienteId = null;
@@ -2488,9 +2518,14 @@ function renderConfig(){
 function render(){
   renderStats();
   const adminBtn = document.getElementById('btn-admin-toggle');
-  adminBtn.textContent = isAdmin ? '🔓 Administrador (ativo)' : '🔒 Administrador';
-  adminBtn.classList.toggle('btn-primary', isAdmin);
-  adminBtn.classList.toggle('btn-ghost', !isAdmin);
+  if(adminBtn){
+    const email = (currentUser && currentUser.email) ? currentUser.email : '';
+    const papel = isAdmin ? 'Administrador' : 'Operador';
+    adminBtn.textContent = `${isAdmin?'🔓':'👤'} ${papel}${email?' · Sair':''}`;
+    adminBtn.title = email ? `Logado como ${email}. Clique para sair.` : 'Sair';
+    adminBtn.classList.toggle('btn-primary', isAdmin);
+    adminBtn.classList.toggle('btn-ghost', !isAdmin);
+  }
   if(activeTab==='setores') renderSetores();
   else if(activeTab==='desenvolvimento') renderDesenvolvimento();
   else if(activeTab==='pedidos') renderPedidos();
@@ -2504,23 +2539,11 @@ function render(){
   else renderClientes();
 }
 document.getElementById('btn-admin-toggle').addEventListener('click', async ()=>{
-  if(isAdmin){
-    if(await askConfirm('Sair do Modo Administrador?')){
-      isAdmin = false;
-      showToast('Modo Administrador desativado.');
-      render();
-    }
-    return;
+  const email = (currentUser && currentUser.email) ? currentUser.email : '';
+  if(await askConfirm(email ? `Sair da conta ${email}?` : 'Sair do sistema?')){
+    try{ await fbAuth.signOut(); }catch(e){ console.warn('Erro ao sair', e); }
+    location.reload();
   }
-  const senha = await askText('Modo Administrador', 'Digite a senha de administrador:', '');
-  if(senha===null) return;
-  if(senha === ADMIN_PASSWORD){
-    isAdmin = true;
-    showToast('Modo Administrador ativado.');
-  } else {
-    showToast('Senha incorreta.', 'error');
-  }
-  render();
 });
 
 /* ---------------- Render: orçamentos ---------------- */
@@ -3757,14 +3780,8 @@ document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click', async ()=>{
     const destino = tab.dataset.tab;
     if(TABS_RESTRITAS.includes(destino) && !isAdmin){
-      const senha = await askText('Área restrita', 'Essa aba é só para o Administrador. Digite a senha:', '');
-      if(senha===null) return;
-      if(senha !== ADMIN_PASSWORD){
-        showToast('Senha incorreta.', 'error');
-        return;
-      }
-      isAdmin = true;
-      showToast('Modo Administrador ativado.');
+      showToast('Essa aba é só para o Administrador.', 'error');
+      return;
     }
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     tab.classList.add('active');
@@ -3806,14 +3823,57 @@ document.querySelectorAll('#pedidos-status-toggle button').forEach(b=>{
 document.getElementById('search').addEventListener('input', render);
 document.getElementById('btn-clear-search').addEventListener('click', ()=>{ document.getElementById('search').value=''; render(); });
 
-(async function init(){
-  try{
-    await ensureAuth();
-  }catch(e){
-    console.error('Erro de autenticação Firebase', e);
-    document.getElementById('loading').innerHTML = `Erro ao conectar ao servidor.<br/><span style="font-size:11px;color:var(--text-dim)">${escapeHtml((e&&e.message)||String(e))}</span>`;
-    return;
+// ---------------- Tela de login ----------------
+function buildLoginScreen(){
+  const wrap = document.createElement('div');
+  wrap.id = 'login-overlay';
+  wrap.style.cssText = 'position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;';
+  wrap.innerHTML = `
+    <div style="width:100%;max-width:360px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:28px 26px;">
+      <div style="text-align:center;margin-bottom:22px;">
+        <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;letter-spacing:.02em;">Metal Matrizes</div>
+        <div style="color:var(--text-dim);font-size:12.5px;margin-top:2px;">Controle de Produção</div>
+      </div>
+      <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:4px;">E-mail</label>
+      <input id="login-email" type="email" autocomplete="username" placeholder="voce@empresa.com"
+        style="width:100%;padding:11px 12px;margin-bottom:14px;background:var(--panel-2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;" />
+      <label style="display:block;font-size:12px;color:var(--text-dim);margin-bottom:4px;">Senha</label>
+      <input id="login-senha" type="password" autocomplete="current-password" placeholder="••••••••"
+        style="width:100%;padding:11px 12px;margin-bottom:6px;background:var(--panel-2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;" />
+      <div id="login-erro" style="min-height:18px;color:var(--red);font-size:12.5px;margin:4px 0 12px;"></div>
+      <button id="login-btn" class="btn btn-primary" style="width:100%;padding:12px;">Entrar</button>
+    </div>`;
+  document.body.appendChild(wrap);
+
+  const emailEl = wrap.querySelector('#login-email');
+  const senhaEl = wrap.querySelector('#login-senha');
+  const erroEl  = wrap.querySelector('#login-erro');
+  const btnEl   = wrap.querySelector('#login-btn');
+
+  async function tentarLogin(){
+    const email = emailEl.value.trim();
+    const senha = senhaEl.value;
+    erroEl.textContent = '';
+    if(!email || !senha){ erroEl.textContent = 'Preencha e-mail e senha.'; return; }
+    btnEl.disabled = true;
+    btnEl.textContent = 'Entrando...';
+    try{
+      await fbAuth.signInWithEmailAndPassword(email, senha);
+      // onAuthStateChanged em ensureAuth cuida do resto; recarrega para bootar limpo.
+      location.reload();
+    }catch(e){
+      erroEl.textContent = traduzErroAuth(e);
+      btnEl.disabled = false;
+      btnEl.textContent = 'Entrar';
+    }
   }
+  btnEl.addEventListener('click', tentarLogin);
+  senhaEl.addEventListener('keydown', ev=>{ if(ev.key==='Enter') tentarLogin(); });
+  emailEl.addEventListener('keydown', ev=>{ if(ev.key==='Enter') senhaEl.focus(); });
+  setTimeout(()=>emailEl.focus(), 100);
+}
+
+async function bootApp(){
   await loadClientes();
   populateClientesDatalist();
   await loadSetorRates();
@@ -3829,6 +3889,26 @@ document.getElementById('btn-clear-search').addEventListener('click', ()=>{ docu
   document.getElementById('view-setores').classList.remove('hidden');
   render();
   setInterval(()=>{ if(activeTab==='setores') renderSetores(); }, 60000);
+}
+
+(async function init(){
+  let user;
+  try{
+    user = await ensureAuth();
+  }catch(e){
+    console.error('Erro de autenticação Firebase', e);
+    document.getElementById('loading').innerHTML = `Erro ao conectar ao servidor.<br/><span style="font-size:11px;color:var(--text-dim)">${escapeHtml((e&&e.message)||String(e))}</span>`;
+    return;
+  }
+  if(!user){
+    // Ninguém logado: mostra a tela de login e para por aqui.
+    document.getElementById('loading').classList.add('hidden');
+    buildLoginScreen();
+    return;
+  }
+  currentUser = user;
+  await loadUserRole(user);
+  await bootApp();
 })();
 </script>
 
