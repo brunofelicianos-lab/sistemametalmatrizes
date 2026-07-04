@@ -94,7 +94,7 @@ body{
 .view-toggle button.active{ background: var(--amber); color:#1a1300; }
 
 /* Setor board */
-.setor-board{ display:grid; grid-template-columns: repeat(auto-fill, minmax(255px,1fr)); gap:14px; }
+.setor-board{ display:grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap:14px; }
 .setor-col{ background: rgba(255,255,255,0.015); border:1px solid var(--border); border-radius:8px; min-height: 140px; }
 .setor-head{ padding: 11px 13px; border-bottom: 1px solid var(--border); border-top: 3px solid var(--g); border-radius: 8px 8px 0 0;}
 .setor-name{ font-family:'Oswald',sans-serif; font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; font-weight:700; }
@@ -106,6 +106,36 @@ body{
 
 /* card */
 .card{ background: var(--panel); border:1px solid var(--border); border-radius:6px; padding: 11px; border-left: 4px solid var(--slate); }
+.card.compacto{ padding: 7px 10px; }
+.card .card-head{ display:flex; align-items:flex-start; gap:9px; }
+.card .card-head-info{ flex:1; min-width:0; display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+.card .card-head-info .op-num{ flex:0 0 auto; }
+.card .card-head-info .linha-cliente{ flex:1; min-width:120px; font-size:13px; font-weight:600; color:var(--text); line-height:1.3; }
+.card .card-head-info .badge{ flex:0 0 auto; margin-top:0; }
+.card .btn-mais{ flex:0 0 auto; width:24px; height:24px; border-radius:5px; border:1px solid var(--border); background:var(--panel-2); color:var(--text-dim); font-size:16px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .12s ease; padding:0; }
+.card .btn-mais:hover{ color:var(--text); border-color:var(--text-dim); }
+.card .btn-fila-mini{ flex:0 0 auto; width:22px; height:22px; border-radius:5px; border:1px solid var(--border); background:var(--panel-2); color:var(--text-dim); font-size:13px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+.card .btn-fila-mini:hover:not(:disabled){ color:var(--text); border-color:var(--text-dim); }
+.card .btn-fila-mini:disabled{ opacity:.25; cursor:default; }
+.card .card-head-arrows{ flex:0 0 auto; display:flex; gap:4px; align-items:center; }
+.card .btn-mais.aberto{ background:var(--amber); color:#1a1300; border-color:var(--amber); }
+.card .card-detalhe{ margin-top:9px; padding-top:9px; border-top:1px dashed var(--border); }
+/* Cores manuais de card (definidas pelo admin). Substituem a barrinha de prioridade. */
+.card.cor-vermelho{ background:#3a2020; border-left-color:#d8342d; }
+.card.cor-laranja{ background:#3a2c1c; border-left-color:#e8491d; }
+.card.cor-amarelo{ background:#38331a; border-left-color:#f2a900; }
+.card.cor-verde{ background:#1f3324; border-left-color:#3fae5a; }
+.card.cor-azul{ background:#1c2c3a; border-left-color:#2d8fd8; }
+.card.cor-roxo{ background:#2c2338; border-left-color:#9b6fd8; }
+.card.cor-retrabalho{ background:#000; border:1px solid #444; border-left:4px solid #e8491d; box-shadow:0 0 0 1px #000; }
+.card.cor-retrabalho .op-num{ color:#ff7a4d; }
+.card.cor-retrabalho .linha-cliente{ color:#fff; }
+.card-cor-picker{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:9px; padding-bottom:9px; border-bottom:1px dashed var(--border); }
+.card-cor-picker .lbl{ font-size:10px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-dim); margin-right:2px; }
+.card-cor-picker .cor-dot{ width:20px; height:20px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:transform .1s ease; }
+.card-cor-picker .cor-dot:hover{ transform:scale(1.15); }
+.card-cor-picker .cor-dot.sel{ border-color:var(--text); }
+.card-cor-picker .cor-dot.nenhum{ background:var(--panel-2); border:2px dashed var(--text-dim); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--text-dim); }
 .card.prio-baixa{ border-left-color: var(--slate); }
 .card.prio-normal{ border-left-color: var(--blue); }
 .card.prio-alta{ border-left-color: var(--amber); }
@@ -224,6 +254,14 @@ body{
 .fiscal-section-title{ font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.05em; font-size:13px; font-weight:700; color: var(--text-dim); margin: 22px 0 10px; }
 .fiscal-section-title:first-child{ margin-top:0; }
 .fiscal-row{ background: var(--panel); border:1px solid var(--border); border-radius:7px; padding: 13px 15px; margin-bottom: 10px; display:flex; justify-content:space-between; align-items:center; gap: 14px; flex-wrap:wrap; }
+.fiscal-row.liberado{ background:#16281c; border-color:#2f5e3a; border-left:4px solid var(--green); }
+.fiscal-row.faturado{ background:#2c2810; border-color:#5c531f; border-left:4px solid var(--amber); }
+.fiscal-row .fh-head{ display:flex; align-items:center; gap:10px; width:100%; }
+.fiscal-row .fh-info{ flex:1; min-width:0; }
+.fiscal-row .fh-detalhe{ width:100%; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); }
+.fiscal-row .btn-mais{ flex:0 0 auto; width:26px; height:26px; border-radius:5px; border:1px solid var(--border); background:var(--panel-2); color:var(--text-dim); font-size:17px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+.fiscal-row .btn-mais.aberto{ background:var(--amber); color:#1a1300; border-color:var(--amber); }
+.fiscal-row .cobranca-input{ width:100%; min-height:54px; background:var(--panel-2); border:1px solid var(--border); border-radius:5px; color:var(--text); font-size:12.5px; padding:8px 10px; font-family:inherit; resize:vertical; margin-top:6px; }
 .fiscal-row .valor{ font-family:'JetBrains Mono',monospace; font-weight:700; color: var(--amber); font-size: 14px; }
 .fiscal-row .nf{ font-family:'JetBrains Mono',monospace; color: var(--green); font-size: 12.5px; }
 .fiscal-badge{ font-size: 10.5px; text-transform:uppercase; letter-spacing:.04em; font-weight:700; padding: 3px 8px; border-radius:3px; display:inline-block; }
@@ -272,6 +310,7 @@ body{
 #overlay-printpreview .btn-ghost:hover{ color:#222; border-color:#888; }
 .toast{ background: var(--panel); border:1px solid var(--border); border-left:4px solid var(--blue); border-radius:6px; padding:12px 14px; font-size:13px; color: var(--text); box-shadow: 0 4px 16px rgba(0,0,0,0.3); animation: toast-in .2s ease; }
 .toast.error{ border-left-color: var(--orange); }
+.toast.ok{ border-left-color: var(--green); }
 @keyframes toast-in{ from{ opacity:0; transform:translateY(-8px); } to{ opacity:1; transform:translateY(0); } }
 
 /* Print */
@@ -370,12 +409,12 @@ body{
     <button class="tab" data-tab="desenvolvimento">Desenvolvimento</button>
     <button class="tab" data-tab="pedidos">Pedidos</button>
     <button class="tab" data-tab="orcamentos">Orçamentos</button>
-    <button class="tab" data-tab="aguardcompra">Aguard. Compra</button>
     <button class="tab" data-tab="fiscal">Fiscal</button>
     <button class="tab" data-tab="compras">Compras</button>
     <button class="tab" data-tab="epi">EPI</button>
     <button class="tab" data-tab="lembretes">Lembretes</button>
     <button class="tab" data-tab="clientes">Clientes</button>
+    <button class="tab" data-tab="retrabalho">Retrabalho</button>
     <button class="tab" data-tab="config">Config</button>
   </div>
 
@@ -426,14 +465,12 @@ body{
     <div id="orcamentos-list"></div>
   </div>
 
-  <div id="view-aguardcompra" class="hidden">
-    <div class="toolbar">
-      <div style="flex:1;font-size:12.5px;color:var(--text-dim);">Pedidos com produção concluída, mas que aguardam a chegada do pedido de compra do cliente antes de seguir pro Fiscal.</div>
-    </div>
-    <div id="aguardcompra-list"></div>
-  </div>
-
   <div id="view-fiscal" class="hidden">
+    <div class="view-toggle" id="fiscal-filter-toggle" style="margin-bottom:14px;">
+      <button data-fiscal="espera" class="active">Em espera</button>
+      <button data-fiscal="liberados">Liberados</button>
+      <button data-fiscal="finalizados">Finalizados</button>
+    </div>
     <div id="fiscal-list"></div>
   </div>
 
@@ -467,6 +504,16 @@ body{
       <button class="btn btn-primary btn-sm" id="btn-new-cliente">+ Novo Cliente</button>
     </div>
     <div id="clientes-list"></div>
+  </div>
+
+  <div id="view-retrabalho" class="hidden">
+    <div class="toolbar">
+      <div style="flex:1;font-size:12.5px;color:var(--text-dim);">Registro de retrabalhos para acompanhar o que é gerado no mês. Lançamento manual.</div>
+      <input type="month" id="retrabalho-mes" class="custo-input" style="width:auto;" />
+      <button class="btn btn-primary btn-sm" id="btn-new-retrabalho">+ Novo Retrabalho</button>
+    </div>
+    <div id="retrabalho-resumo"></div>
+    <div id="retrabalho-list"></div>
   </div>
 
   <div id="view-config" class="hidden">
@@ -836,6 +883,8 @@ const PANEL_VIEWS = {
 };
 let currentPanelView = 'todos';
 let expandedGroups = new Set();
+let expandedCards = new Set();
+let expandedFiscal = new Set();
 let isAdmin = false;
 
 let clientes = [];
@@ -851,6 +900,7 @@ let detailId = null;
 let formArquivos = [];
 let removedFileIds = [];
 let pedidosViewMode = 'detalhada';
+let fiscalFilter = 'espera';
 let pedidosStatusFilter = 'todos';
 
 /* ---------------- Helpers ---------------- */
@@ -872,7 +922,80 @@ function fmtDuration(ms){
   if(h>0) return `${h}h ${m}min`;
   return `${m}min`;
 }
+// Interpreta tempo digitado: "3h20", "3:20", "3.5", "3h", "45m", "90" (minutos).
+function parseTempoParaMs(txt){
+  if(txt===null || txt===undefined) return null;
+  let s = String(txt).trim().toLowerCase().replace(',', '.');
+  if(!s) return null;
+  let h = 0, m = 0;
+  let match;
+  if((match = s.match(/^(\d+)\s*[h:]\s*(\d{1,2})$/))){        // 3h20 ou 3:20
+    h = parseInt(match[1],10); m = parseInt(match[2],10);
+  } else if((match = s.match(/^(\d+)\s*h$/))){                 // 3h
+    h = parseInt(match[1],10);
+  } else if((match = s.match(/^(\d+)\s*m(in)?$/))){            // 45m / 45min
+    m = parseInt(match[1],10);
+  } else if((match = s.match(/^(\d+(?:\.\d+)?)\s*h?$/)) && s.includes('.')){ // 3.5 (horas decimais)
+    h = Math.floor(parseFloat(match[1]));
+    m = Math.round((parseFloat(match[1]) - h) * 60);
+  } else if((match = s.match(/^(\d+)$/))){                     // número puro = minutos
+    m = parseInt(match[1],10);
+  } else {
+    return null;
+  }
+  if(m >= 60){ h += Math.floor(m/60); m = m%60; }
+  const ms = (h*3600000) + (m*60000);
+  return isNaN(ms) ? null : ms;
+}
+const CARD_CORES = [
+  { id:'',          hex:'',        nome:'Sem cor' },
+  { id:'vermelho',  hex:'#d8342d', nome:'Vermelho' },
+  { id:'laranja',   hex:'#e8491d', nome:'Laranja' },
+  { id:'amarelo',   hex:'#f2a900', nome:'Amarelo' },
+  { id:'verde',     hex:'#3fae5a', nome:'Verde' },
+  { id:'azul',      hex:'#2d8fd8', nome:'Azul' },
+  { id:'roxo',      hex:'#9b6fd8', nome:'Roxo' },
+];
+
+// Classe de cor do card, agora POR SETOR.
+// Retrabalho é sempre preto (destaque máximo).
+// Senão, se a etapa está "em andamento", verde. Senão cor manual do setor. Senão prioridade.
+function cardCorClass(op, setorNome, emAndamento){
+  if(op.isRetrabalho) return 'cor-retrabalho';
+  if(emAndamento) return 'cor-verde';
+  const cor = (op.coresPorSetor && op.coresPorSetor[setorNome]) || '';
+  return cor !== '' ? `cor-${cor}` : `prio-${op.prioridade}`;
+}
+
+// Seletor de bolinhas — só admin. Marca a cor manual daquele setor.
+// Quando em andamento, avisa que o verde automático está no comando.
+function cardCorPicker(op, setorNome, emAndamento){
+  if(!isAdmin) return '';
+  const atual = (op.coresPorSetor && op.coresPorSetor[setorNome]) || '';
+  const dots = CARD_CORES.map(c=>{
+    const sel = atual === c.id ? ' sel' : '';
+    if(c.id===''){
+      return `<div class="cor-dot nenhum${sel}" data-action="setCardCor" data-id="${op.id}" data-setor="${escapeHtml(setorNome)}" data-cor="" title="Sem cor">✕</div>`;
+    }
+    return `<div class="cor-dot${sel}" data-action="setCardCor" data-id="${op.id}" data-setor="${escapeHtml(setorNome)}" data-cor="${c.id}" style="background:${c.hex}" title="${c.nome}"></div>`;
+  }).join('');
+  const aviso = emAndamento ? `<span class="lbl" style="color:var(--green);">verde = em andamento</span>` : '';
+  return `<div class="card-cor-picker"><span class="lbl">Cor (só ${escapeHtml(setorNome)})</span>${dots}${aviso}</div>`;
+}
+
+// Setinhas de fila compactas para o cabeçalho do card.
+// Só admin, e só quando há mais de um na fila. Reusa filaUpLote/filaDownLote.
+function filaArrowsHead(dataAttrs, filaPos, filaTotal){
+  if(!isAdmin || filaTotal<=1) return '';
+  const up = `<button class="btn-fila-mini" data-action="filaUpLote" ${dataAttrs} ${filaPos===0?'disabled':''} title="Subir na fila">↑</button>`;
+  const down = `<button class="btn-fila-mini" data-action="filaDownLote" ${dataAttrs} ${filaPos===filaTotal-1?'disabled':''} title="Descer na fila">↓</button>`;
+  return up + down;
+}
+
 function fmtCurrency(v){
+  // Valores em dinheiro só aparecem para o administrador.
+  // Para operadores, mostramos um marcador oculto em vez do número.
+  if(!isAdmin) return 'R$ ••••';
   if(v === null || v === undefined || v === '') return '—';
   return Number(v).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
 }
@@ -964,8 +1087,9 @@ function stepStatus(step){
   return last.fim ? 'pausado' : 'andamento';
 }
 function stepTotalMs(step){
-  if(!step.sessoes) return 0;
-  return step.sessoes.reduce((sum,s)=> sum + ((s.fim||Date.now()) - s.inicio), 0);
+  if(!step.sessoes) return Math.max(0, step.ajusteMs || 0);
+  const bruto = step.sessoes.reduce((sum,s)=> sum + ((s.fim||Date.now()) - s.inicio), 0);
+  return Math.max(0, bruto + (step.ajusteMs || 0));
 }
 function currentStepOfPeca(peca){ return peca.roteiro[peca.currentStepIndex]; }
 function recomputeOpStatus(op){
@@ -989,6 +1113,7 @@ function migratePecaRoteiro(roteiro){
         st.sessoes.push({ inicio: st.iniciadoEm, fim: st.concluidoEm || null, responsavel: st.responsavelEtapa || '' });
       }
     }
+    if(st.ajusteMs===undefined) st.ajusteMs = 0;
     delete st.iniciadoEm;
     delete st.responsavelEtapa;
   });
@@ -1021,6 +1146,12 @@ function migrateOp(op){
   op.pecas.forEach(p=>{ if(p.valorUnit===undefined) p.valorUnit = 0; });
   recomputeOpStatus(op);
   if(op.valor===undefined) op.valor = null;
+  if(op.isRetrabalho===undefined) op.isRetrabalho = false;
+  if(op.retrabalhoMotivo===undefined) op.retrabalhoMotivo = '';
+  if(op.coresPorSetor===undefined || typeof op.coresPorSetor !== 'object' || op.coresPorSetor===null){
+    op.coresPorSetor = {};
+    // Migração: se havia uma cor única antiga, descarta (agora é por setor).
+  }
   if(op.faturado===undefined) op.faturado = false;
   if(op.faturadoEm===undefined) op.faturadoEm = null;
   if(op.notaFiscal===undefined) op.notaFiscal = '';
@@ -1035,6 +1166,8 @@ function migrateOp(op){
   if(op.materiais===undefined) op.materiais = [];
   if(op.anexosFiscais===undefined) op.anexosFiscais = [];
   if(op.valorFaturamento===undefined) op.valorFaturamento = 'informado';
+  if(op.detalhesCobranca===undefined) op.detalhesCobranca = '';
+  if(op.anexosBoletos===undefined) op.anexosBoletos = [];
   if(op.valorFaturado===undefined) op.valorFaturado = null;
   return op;
 }
@@ -1345,6 +1478,152 @@ document.getElementById('btn-new-compra').addEventListener('click', async ()=>{
   };
   compras.push(novo);
   await comprasColl.persistItem(novo);
+  render();
+});
+
+// ---------------- Retrabalho ----------------
+let retrabalhoMesSel = ''; // 'AAAA-MM'; vazio = mês atual
+
+function mesAtualStr(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+// Dados de um retrabalho (OP com isRetrabalho): tempo e custo vêm da etapa cronometrada.
+function retrabalhoDados(op){
+  const step = (op.pecas && op.pecas[0] && op.pecas[0].roteiro && op.pecas[0].roteiro[0]) || null;
+  const ms = step ? stepTotalMs(step) : 0;
+  const custo = step ? custoStep(step) : 0;
+  const setor = step ? step.setor : '—';
+  const status = step ? stepStatus(step) : 'aguardando';
+  return { ms, custo, setor, status, horas: ms/3600000 };
+}
+// Data de referência do retrabalho para o mês: quando concluído usa a conclusão, senão a criação.
+function retrabalhoDataRef(op){
+  const step = op.pecas && op.pecas[0] && op.pecas[0].roteiro && op.pecas[0].roteiro[0];
+  if(step && step.concluidoEm) return step.concluidoEm;
+  return op.createdAt || Date.now();
+}
+function retrabalhosDoMes(mesStr){
+  return ops.filter(op=>{
+    if(!op.isRetrabalho) return false;
+    const d = new Date(retrabalhoDataRef(op));
+    const m = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    return m === mesStr;
+  }).sort((a,b)=> retrabalhoDataRef(b) - retrabalhoDataRef(a));
+}
+function renderRetrabalho(){
+  const mesStr = retrabalhoMesSel || mesAtualStr();
+  const mesInput = document.getElementById('retrabalho-mes');
+  if(mesInput && mesInput.value !== mesStr) mesInput.value = mesStr;
+
+  const doMes = retrabalhosDoMes(mesStr);
+  let totPecas=0, totMs=0, totCusto=0;
+  const porSetor = {};
+  doMes.forEach(op=>{
+    const d = retrabalhoDados(op);
+    const qtd = (op.pecas && op.pecas[0] && op.pecas[0].quantidade) || 1;
+    totPecas += qtd; totMs += d.ms; totCusto += d.custo;
+    if(!porSetor[d.setor]) porSetor[d.setor] = { custo:0, qtd:0 };
+    porSetor[d.setor].custo += d.custo;
+    porSetor[d.setor].qtd += 1;
+  });
+  const totHoras = totMs/3600000;
+  const setoresOrdenados = Object.keys(porSetor).sort((a,b)=> porSetor[b].custo - porSetor[a].custo);
+
+  const resumo = document.getElementById('retrabalho-resumo');
+  resumo.innerHTML = `
+    <div class="stats" style="grid-template-columns:repeat(3,1fr);">
+      <div class="stat"><div class="num">${totPecas}</div><div class="lbl">Peças retrabalhadas</div></div>
+      <div class="stat warn"><div class="num">${fmtDuration(totMs)}</div><div class="lbl">Tempo cronometrado</div></div>
+      <div class="stat fiscal"><div class="num">${fmtCurrency(totCusto)}</div><div class="lbl">Custo total</div></div>
+    </div>
+    ${setoresOrdenados.length? `<div class="fiscal-meta" style="margin:2px 0 14px;">Por setor: ${setoresOrdenados.map(s=>`${escapeHtml(s)} (${porSetor[s].qtd} — ${fmtCurrency(porSetor[s].custo)})`).join(' · ')}</div>` : ''}`;
+
+  const list = document.getElementById('retrabalho-list');
+  if(doMes.length===0){
+    list.innerHTML = `<div class="col-empty">Nenhum retrabalho neste mês</div>`;
+    return;
+  }
+  const statusLabel = { aguardando:'Aguardando', andamento:'Em andamento', pausado:'Pausado', concluido:'Concluído' };
+  const statusBadge = { aguardando:'aguardando', andamento:'andamento', pausado:'pausado', concluido:'ok' };
+  list.innerHTML = doMes.map(op=>{
+    const d = retrabalhoDados(op);
+    const qtd = (op.pecas && op.pecas[0] && op.pecas[0].quantidade) || 1;
+    return `
+    <div class="cliente-row">
+      <div style="flex:1">
+        <div class="nome">${escapeHtml(op.produto||'—')}
+          <span class="badge bloqueado" style="margin-left:6px;">${escapeHtml(d.setor)}</span>
+          <span class="badge ${statusBadge[d.status]||'aguardando'}" style="margin-left:4px;">${statusLabel[d.status]||d.status}</span>
+        </div>
+        <div class="sub">${qtd} peça(s) · ${fmtDuration(d.ms)} · ${fmtCurrency(d.custo)}</div>
+        ${op.retrabalhoMotivo? `<div class="sub">Motivo: ${escapeHtml(op.retrabalhoMotivo)}</div>`:''}
+        <div class="fiscal-meta">${op.numero} · cadastrado ${fmtDateTime(op.createdAt)}</div>
+      </div>
+      <div class="ped-actions">
+        <button class="mini-btn del" data-action="delRetrabalho" data-id="${op.id}">Excluir</button>
+      </div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click', onRetrabalhoAction));
+}
+async function onRetrabalhoAction(e){
+  const id = e.currentTarget.dataset.id;
+  const action = e.currentTarget.dataset.action;
+  if(action==='delRetrabalho'){
+    if(!(await askConfirm('Excluir este retrabalho? Isso remove o card do painel também.'))) return;
+    ops = ops.filter(x=>x.id!==id);
+    await deleteOpDoc(id);
+    render();
+  }
+}
+const mesInputEl = document.getElementById('retrabalho-mes');
+if(mesInputEl){
+  mesInputEl.addEventListener('change', ()=>{ retrabalhoMesSel = mesInputEl.value || ''; render(); });
+}
+document.getElementById('btn-new-retrabalho').addEventListener('click', async ()=>{
+  if(!isAdmin){ showToast('Apenas o administrador pode lançar retrabalho.', 'error'); return; }
+
+  const peca = await askText('Novo retrabalho', 'Peça / descrição do retrabalho:', '');
+  if(peca===null || !peca.trim()) return;
+
+  const setor = await askChoice('Novo retrabalho', 'Em qual setor será feito o retrabalho?', SETORES.map(s=>({label:s.nome, value:s.nome})));
+  if(setor===null) return;
+
+  const pecasStr = await askText('Novo retrabalho', 'Quantas peças serão retrabalhadas?', '1');
+  if(pecasStr===null) return;
+  const qtd = parseInt(pecasStr,10);
+  if(isNaN(qtd) || qtd<=0){ showToast('Quantidade inválida.', 'error'); return; }
+
+  const motivo = await askText('Novo retrabalho', 'Motivo / causa do retrabalho:', '');
+  if(motivo===null) return;
+
+  const cliente = await askText('Novo retrabalho', 'Cliente (opcional):', '');
+  if(cliente===null) return;
+
+  // O retrabalho é uma OP com uma etapa única no setor escolhido.
+  // O operador vai iniciar/pausar/finalizar, e o tempo é cronometrado de verdade.
+  const recordId = 'op_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  const numero = await getNextNumero('rtCounter','RT');
+  const pecaObj = {
+    id: genId(), nome: peca.trim(), quantidade: qtd, valorUnit: 0,
+    roteiro: [{ setor, sessoes:[], concluidoEm:null, responsavelFinal:'' }],
+    currentStepIndex: 0, status: 'pendente', concluidaEm: null
+  };
+  const op = {
+    id: recordId, numero,
+    produto: peca.trim(), prioridade: 'normal', cliente: cliente.trim(),
+    responsavel: '', pedidoCompra: '', pastaRede: '', valor: null, valorFaturamento: null,
+    entrega: '', observacoes: motivo.trim(),
+    isRetrabalho: true, retrabalhoMotivo: motivo.trim(),
+    pecas: [pecaObj], status: 'pendente',
+    liberadoFiscal: false, faturado: false, faturadoEm: null, notaFiscal: '',
+    faturadoPor: '', valorFaturado: null, arquivos: [], createdAt: Date.now()
+  };
+  recomputeOpStatus(op);
+  ops.push(op);
+  await persistOp(op);
+  showToast('Retrabalho cadastrado. O operador já pode cronometrar no painel do setor.');
   render();
 });
 
@@ -1850,8 +2129,8 @@ function renderStats(){
   document.getElementById('st-andamento').textContent = ops.filter(o=>o.status==='em_andamento').length;
   document.getElementById('st-concluida').textContent = ops.filter(o=>o.status==='concluida').length;
   document.getElementById('st-atrasada').textContent = ops.filter(isAtrasada).length;
-  document.getElementById('st-fiscal').textContent = ops.filter(o=>o.status==='concluida' && !o.liberadoFiscal).length;
-  document.getElementById('st-faturar').textContent = ops.filter(o=>o.status==='concluida' && o.liberadoFiscal && !o.faturado).length;
+  document.getElementById('st-fiscal').textContent = ops.filter(o=>!o.isRetrabalho && o.status==='concluida' && !o.liberadoFiscal).length;
+  document.getElementById('st-faturar').textContent = ops.filter(o=>!o.isRetrabalho && o.status==='concluida' && o.liberadoFiscal && !o.faturado).length;
 }
 
 /* ---------------- Render: painel por setor ---------------- */
@@ -2100,19 +2379,30 @@ function singleAtualCardHtml(op, it, filaPos, filaTotal){
     </div>`
   ) : '';
 
+  const detalheId = `det-${op.id}-${peca.id}`;
+
   return `
-  <div class="card prio-${op.prioridade}">
-    ${filaHtml}
-    <div class="op-num">${op.numero}</div>
-    <div class="prod">${escapeHtml(peca.nome)}</div>
-    <div class="qty">QTD: ${peca.quantidade}</div>
-    ${pastaRedeHtml(op.pastaRede)}
-    ${badgeHtml}
-    ${totalMs>0 ? `<div class="tempo-total">Tempo registrado: ${fmtDuration(totalMs)}</div>` : ''}
-    ${custoInputHtml}
-    <div class="actions">
-      ${actionsHtml}
-      <button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro</button>
+  <div class="card compacto ${cardCorClass(op, step.setor, sub==='andamento')}">
+    <div class="card-head">
+      <div class="card-head-info">
+        <span class="op-num">${op.numero}</span>
+        <span class="linha-cliente">${op.isRetrabalho? '<span class="badge" style="background:#e8491d;color:#fff;margin-right:6px;">RETRABALHO</span>' : ''}${escapeHtml(peca.nome)}${op.cliente? ' · '+escapeHtml(op.cliente):''}</span>
+        ${badgeHtml}
+      </div>
+      ${filaArrowsHead(dataAttrs, filaPos, filaTotal)}
+      <button class="btn-mais ${expandedCards.has(detalheId)?'aberto':''}" data-action="toggleDetalhe" data-target="${detalheId}" title="Ver detalhes e ações">${expandedCards.has(detalheId)?'−':'+'}</button>
+    </div>
+    <div class="card-detalhe" id="${detalheId}" style="display:${expandedCards.has(detalheId)?'':'none'};">
+      ${cardCorPicker(op, step.setor, sub==='andamento')}
+      ${filaHtml}
+      <div class="qty">QTD: ${peca.quantidade}</div>
+      ${pastaRedeHtml(op.pastaRede)}
+      ${totalMs>0 ? `<div class="tempo-total">Tempo registrado: ${fmtDuration(totalMs)}${isAdmin? ` <button class="link-btn" data-action="ajustarTempo" data-op="${op.id}" data-peca="${peca.id}">ajustar</button>`:''}</div>` : (isAdmin? `<div class="tempo-total"><button class="link-btn" data-action="ajustarTempo" data-op="${op.id}" data-peca="${peca.id}">ajustar tempo</button></div>`:'')}
+      ${custoInputHtml}
+      <div class="actions">
+        ${actionsHtml}
+        <button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro</button>
+      </div>
     </div>
   </div>`;
 }
@@ -2151,18 +2441,30 @@ function atualCollapsibleHtml(g, groupPos, groupTotal, filaPosMap, filaTotalFlat
       <button class="mini-btn fila-mv" data-action="filaDownLote" ${grupoDataAttrs} ${groupPos===groupTotal-1?'disabled style="opacity:.3"':''}>↓</button>
     </div>` : '';
 
+  const detalheId = `detg-${op.id}-${items[0].st.setor}`;
+
   return `
-  <div class="card prio-${op.prioridade}">
-    ${filaGrupoHtml}
-    <div class="op-num">${op.numero}</div>
-    <div class="prod">${escapeHtml(op.produto)}</div>
-    <div class="qty">${op.cliente? 'Cliente: '+escapeHtml(op.cliente):''}</div>
-    ${clip}
-    <details class="bloqueado-details" data-group-key="${groupKey}" ${expandedGroups.has(groupKey)?'open':''}>
-      <summary class="badge ${sub}">📦 ${items.length} peças aqui (${resumo}) — ver peças</summary>
-      <div class="bloqueado-lista" style="gap:10px;">${subCardsHtml}</div>
-    </details>
-    <div class="actions"><button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro completo</button></div>
+  <div class="card compacto ${cardCorClass(op, items[0].st.setor, sub==='andamento')}">
+    <div class="card-head">
+      <div class="card-head-info">
+        <span class="op-num">${op.numero}</span>
+        <span class="linha-cliente">${escapeHtml(op.produto)}${op.cliente? ' · '+escapeHtml(op.cliente):''}</span>
+        <span class="badge ${sub}">📦 ${items.length}</span>
+      </div>
+      ${filaArrowsHead(grupoDataAttrs, groupPos, groupTotal)}
+      <button class="btn-mais ${expandedCards.has(detalheId)?'aberto':''}" data-action="toggleDetalhe" data-target="${detalheId}" title="Ver peças e ações">${expandedCards.has(detalheId)?'−':'+'}</button>
+    </div>
+    <div class="card-detalhe" id="${detalheId}" style="display:${expandedCards.has(detalheId)?'':'none'};">
+      ${cardCorPicker(op, items[0].st.setor, sub==='andamento')}
+      ${filaGrupoHtml}
+      <div class="qty">${resumo}</div>
+      ${clip}
+      <details class="bloqueado-details" data-group-key="${groupKey}" ${expandedGroups.has(groupKey)?'open':''}>
+        <summary class="badge ${sub}">Ver as ${items.length} peças</summary>
+        <div class="bloqueado-lista" style="gap:10px;">${subCardsHtml}</div>
+      </details>
+      <div class="actions"><button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro completo</button></div>
+    </div>
   </div>`;
 }
 
@@ -2185,15 +2487,24 @@ function bloqueadoGroupHtml(g, setorNome, groupPos, groupTotal, filaPosMap, fila
   if(!multi){
     const it = items[0];
     const anterior = it.peca.roteiro[it.i-1] ? it.peca.roteiro[it.i-1].setor : '—';
+    const detalheId = `detb-${op.id}-${it.peca.id}`;
     return `
-    <div class="card prio-${op.prioridade} locked">
-      ${filaBtnsFor(it)}
-      <div class="op-num">${op.numero}</div>
-      <div class="prod">${escapeHtml(it.peca.nome)}</div>
-      <div class="qty">Matriz: ${escapeHtml(op.produto)}${op.cliente? ' · Cliente: '+escapeHtml(op.cliente):''}</div>
-      ${pastaRedeHtml(op.pastaRede)}
-      <span class="badge bloqueado">🔒 Aguardando: ${escapeHtml(anterior)}</span>
-      <div class="actions"><button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro</button></div>
+    <div class="card compacto locked ${cardCorClass(op, setorNome, false)}">
+      <div class="card-head">
+        <div class="card-head-info">
+          <span class="op-num">${op.numero}</span>
+          <span class="linha-cliente">${op.isRetrabalho? '<span class="badge" style="background:#e8491d;color:#fff;margin-right:6px;">RETRABALHO</span>' : ''}${escapeHtml(it.peca.nome)}${op.cliente? ' · '+escapeHtml(op.cliente):''}</span>
+          <span class="badge bloqueado">🔒 ${escapeHtml(anterior)}</span>
+        </div>
+        <button class="btn-mais ${expandedCards.has(detalheId)?'aberto':''}" data-action="toggleDetalhe" data-target="${detalheId}" title="Ver detalhes">${expandedCards.has(detalheId)?'−':'+'}</button>
+      </div>
+      <div class="card-detalhe" id="${detalheId}" style="display:${expandedCards.has(detalheId)?'':'none'};">
+        ${cardCorPicker(op, setorNome, false)}
+        ${filaBtnsFor(it)}
+        <div class="qty">Matriz: ${escapeHtml(op.produto)}</div>
+        ${pastaRedeHtml(op.pastaRede)}
+        <div class="actions"><button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro</button></div>
+      </div>
     </div>`;
   }
 
@@ -2211,18 +2522,27 @@ function bloqueadoGroupHtml(g, setorNome, groupPos, groupTotal, filaPosMap, fila
     return `<div class="bloqueado-item">${escapeHtml(it.peca.nome)} <span class="fiscal-meta">— aguardando: ${escapeHtml(anterior)}</span>${filaBtnsFor(it)}</div>`;
   }).join('');
   const groupKey = `bloq|${setorNome}|${op.id}`;
+  const detalheId = `detbg-${op.id}-${setorNome}`;
 
   return `
-  <div class="card prio-${op.prioridade} locked">
-    ${filaGrupoHtml}
-    <div class="op-num">${op.numero}</div>
-    <div class="prod">${escapeHtml(op.produto)}</div>
-    <div class="qty">${op.cliente? 'Cliente: '+escapeHtml(op.cliente):''}</div>
-    <details class="bloqueado-details" data-group-key="${groupKey}" ${expandedGroups.has(groupKey)?'open':''}>
-      <summary class="badge bloqueado">🔒 ${items.length} peças aguardando — ver sequência</summary>
-      <div class="bloqueado-lista">${listaHtml}</div>
-    </details>
-    <div class="actions"><button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro completo</button></div>
+  <div class="card compacto locked ${cardCorClass(op, setorNome, false)}">
+    <div class="card-head">
+      <div class="card-head-info">
+        <span class="op-num">${op.numero}</span>
+        <span class="linha-cliente">${escapeHtml(op.produto)}${op.cliente? ' · '+escapeHtml(op.cliente):''}</span>
+        <span class="badge bloqueado">🔒 ${items.length}</span>
+      </div>
+      <button class="btn-mais ${expandedCards.has(detalheId)?'aberto':''}" data-action="toggleDetalhe" data-target="${detalheId}" title="Ver peças">${expandedCards.has(detalheId)?'−':'+'}</button>
+    </div>
+    <div class="card-detalhe" id="${detalheId}" style="display:${expandedCards.has(detalheId)?'':'none'};">
+      ${cardCorPicker(op, setorNome, false)}
+      ${filaGrupoHtml}
+      <details class="bloqueado-details" data-group-key="${groupKey}" ${expandedGroups.has(groupKey)?'open':''}>
+        <summary class="badge bloqueado">Ver a sequência das ${items.length} peças</summary>
+        <div class="bloqueado-lista">${listaHtml}</div>
+      </details>
+      <div class="actions"><button class="link-btn" data-action="detalhe" data-id="${op.id}">ver roteiro completo</button></div>
+    </div>
   </div>`;
 }
 
@@ -2293,6 +2613,7 @@ function renderPedidosDetalhada(){
   const term = document.getElementById('search').value.trim().toLowerCase();
   const list = document.getElementById('pedidos-list');
   const filtered = ops.filter(op=>{
+    if(op.isRetrabalho) return false;
     if(op.aguardandoCompra && !op.liberadoFiscal) return false;
     if(pedidosStatusFilter==='processo' && op.status==='concluida') return false;
     if(pedidosStatusFilter==='concluida' && op.status!=='concluida') return false;
@@ -2354,6 +2675,7 @@ function renderPedidosSimples(){
   const term = document.getElementById('search').value.trim().toLowerCase();
   const list = document.getElementById('pedidos-list');
   const filtered = ops.filter(op=>{
+    if(op.isRetrabalho) return false;
     if(op.aguardandoCompra && !op.liberadoFiscal) return false;
     if(pedidosStatusFilter==='processo' && op.status==='concluida') return false;
     if(pedidosStatusFilter==='concluida' && op.status!=='concluida') return false;
@@ -2398,6 +2720,17 @@ function renderPedidosSimples(){
 }
 
 /* ---------------- Render: fiscal ---------------- */
+function anexosBlocoHtml(op, campo, action, delAction, label, vazio){
+  const arr = op[campo] || [];
+  return `
+    <div class="file-list" style="margin-top:8px;">
+      ${arr.length
+        ? arr.map(f=>`<div class="file-item"><span class="ic">${f.embutido?'📄':'🔗'}</span><span class="nm"><a href="${escapeHtml(f.url)}" target="_blank" rel="noopener" download="${escapeHtml(f.name)}" style="color:var(--blue)">${escapeHtml(f.name)}</a></span><span class="sz">${f.embutido?'arquivo':'link'}</span><button class="rm" data-action="${delAction}" data-id="${op.id}" data-fileid="${f.id}">✕</button></div>`).join('')
+        : `<div class="file-empty">${vazio}</div>`}
+    </div>
+    <button class="mini-btn" style="margin-top:6px;" data-action="${action}" data-id="${op.id}">📎 ${label}</button>
+  `;
+}
 function renderFiscal(){
   document.getElementById('pedidos-view-toggle').classList.add('hidden');
   document.getElementById('pedidos-status-toggle').classList.add('hidden');
@@ -2405,48 +2738,101 @@ function renderFiscal(){
   const list = document.getElementById('fiscal-list');
   const matches = op => !term || [op.numero,op.produto,op.cliente,op.pedidoCompra,op.notaFiscal].join(' ').toLowerCase().includes(term);
 
-  const paraFaturar = ops.filter(o=>o.status==='concluida' && o.liberadoFiscal && !o.faturado && matches(o)).sort((a,b)=>a.liberadoFiscalEm-b.liberadoFiscalEm);
-  const faturados = ops.filter(o=>o.status==='concluida' && o.liberadoFiscal && o.faturado && matches(o)).sort((a,b)=>b.faturadoEm-a.faturadoEm);
+  // Três grupos por estágio
+  const base = ops.filter(o=>!o.isRetrabalho && o.status==='concluida' && matches(o));
+  const emEspera   = base.filter(o=>!o.liberadoFiscal).sort((a,b)=>(a.concluidaEm||0)-(b.concluidaEm||0));
+  const liberados  = base.filter(o=>o.liberadoFiscal && !o.faturado).sort((a,b)=>(a.liberadoFiscalEm||0)-(b.liberadoFiscalEm||0));
+  const finalizados= base.filter(o=>o.liberadoFiscal && o.faturado).sort((a,b)=>(b.faturadoEm||0)-(a.faturadoEm||0));
 
-  function rowHtml(op, mode){
-    const extra = mode==='faturar'
-      ? `<button class="mini-btn go" data-action="lancarNF" data-id="${op.id}">✓ Lançar Nota Fiscal</button>`
-      : `<span class="nf">NF ${escapeHtml(op.notaFiscal||'—')}</span> <span class="fiscal-meta">${fmtDateTime(op.faturadoEm)}${op.faturadoPor?' · '+escapeHtml(op.faturadoPor):''}</span> <button class="link-btn" data-action="cancelarNF" data-id="${op.id}">cancelar nota</button>`;
-    const valorDisplay = (mode==='faturado' && op.valorFaturado!=null) ? op.valorFaturado : valorFaturarOp(op);
-    const comparacao = mode==='faturar'
-      ? `<div class="fiscal-meta">Tipo de nota: <b>${tipoNotaLabel(op.tipoNota)}</b> <button class="link-btn" data-action="definirTipoNota" data-id="${op.id}">${op.tipoNota?'trocar':'definir'}</button> · Informado: ${fmtCurrency(op.valor)} · Calculado: ${fmtCurrency(valorCalculadoOp(op))} · Usando: <b>${op.valorFaturamento==='calculado'?'Calculado':'Informado'}</b> <button class="link-btn" data-action="toggleValorFaturamento" data-id="${op.id}">trocar</button></div>`
-      : `<div class="fiscal-meta">Tipo de nota: <b>${tipoNotaLabel(op.tipoNota)}</b> <button class="link-btn" data-action="definirTipoNota" data-id="${op.id}">${op.tipoNota?'trocar':'definir'}</button></div>`;
-    const anexosHtml = `
-      <div class="file-list" style="margin-top:8px;">
-        ${(op.anexosFiscais && op.anexosFiscais.length)
-          ? op.anexosFiscais.map(f=>`<div class="file-item"><span class="ic">${f.embutido?'📄':'🔗'}</span><span class="nm"><a href="${escapeHtml(f.url)}" target="_blank" rel="noopener" download="${escapeHtml(f.name)}" style="color:var(--blue)">${escapeHtml(f.name)}</a></span><span class="sz">${f.embutido?'arquivo':'link'}</span><button class="rm" data-action="delAnexoFiscal" data-id="${op.id}" data-fileid="${f.id}">✕</button></div>`).join('')
-          : `<div class="file-empty">Nenhuma nota/boleto anexado ainda</div>`}
-      </div>
-      <button class="mini-btn" style="margin-top:6px;" data-action="addAnexoFiscal" data-id="${op.id}">📎 Anexar nota/boleto</button>
-    `;
-    return `
-    <div class="fiscal-row">
-      <div class="ped-main">
-        <span class="op-num">${op.numero}</span>
-        <div class="prod">${escapeHtml(op.produto)}</div>
+  const grupo = fiscalFilter==='liberados' ? liberados : fiscalFilter==='finalizados' ? finalizados : emEspera;
+
+  // Atualiza contadores nos botões de filtro
+  const btns = document.querySelectorAll('#fiscal-filter-toggle button');
+  btns.forEach(b=>{
+    const base2 = b.dataset.fiscal;
+    const n = base2==='liberados'?liberados.length : base2==='finalizados'?finalizados.length : emEspera.length;
+    const nome = base2==='liberados'?'Liberados' : base2==='finalizados'?'Finalizados' : 'Em espera';
+    b.textContent = `${nome} (${n})`;
+  });
+
+  function rowHtml(op){
+    const aberto = expandedFiscal.has(op.id);
+    const estado = op.faturado ? 'faturado' : op.liberadoFiscal ? 'liberado' : '';
+    const valorDisplay = (op.faturado && op.valorFaturado!=null) ? op.valorFaturado : valorFaturarOp(op);
+
+    // Cabeçalho limpo
+    let selo = '';
+    if(op.faturado) selo = `<span class="fiscal-badge released" style="background:rgba(242,169,0,.15);color:var(--amber);">Faturado · NF ${escapeHtml(op.notaFiscal||'—')}</span>`;
+    else if(op.liberadoFiscal) selo = `<span class="fiscal-badge released">Liberado p/ faturar</span>`;
+    else selo = `<span class="fiscal-badge pending">Em espera</span>`;
+
+    // Ações principais por estágio
+    let acaoPrincipal = '';
+    if(!op.liberadoFiscal){
+      acaoPrincipal = `<button class="mini-btn fiscal" data-action="liberarFiscal" data-id="${op.id}">✓ Liberar p/ faturar</button>`;
+    } else if(!op.faturado){
+      acaoPrincipal = `<button class="mini-btn go" data-action="lancarNF" data-id="${op.id}">✓ Lançar Nota Fiscal</button>
+        <button class="link-btn" data-action="desfazerFiscal" data-id="${op.id}">desfazer liberação</button>`;
+    } else {
+      acaoPrincipal = `<button class="link-btn" data-action="cancelarNF" data-id="${op.id}">cancelar nota</button>`;
+    }
+
+    // Detalhe expansível
+    const valorLinha = `<div class="fiscal-meta">Informado: ${fmtCurrency(op.valor)} · Calculado: ${fmtCurrency(valorCalculadoOp(op))} · Usando: <b>${op.valorFaturamento==='calculado'?'Calculado':'Informado'}</b> <button class="link-btn" data-action="toggleValorFaturamento" data-id="${op.id}">trocar</button></div>`;
+    const tipoLinha = `<div class="fiscal-meta">Tipo de nota: <b>${tipoNotaLabel(op.tipoNota)}</b> <button class="link-btn" data-action="definirTipoNota" data-id="${op.id}">${op.tipoNota?'trocar':'definir'}</button></div>`;
+
+    const detalhe = aberto ? `
+      <div class="fh-detalhe">
         <div class="sub">${op.pecas.length} peça(s)${op.cliente? ' · Cliente: '+escapeHtml(op.cliente):''} · Pedido de compra: ${op.pedidoCompra? escapeHtml(op.pedidoCompra) : '<span style="color:var(--orange)">não informado</span>'}</div>
-        ${comparacao}
-        ${anexosHtml}
+        ${tipoLinha}
+        ${valorLinha}
+        <div style="margin-top:10px;">
+          <div class="fiscal-meta" style="margin-bottom:2px;">Detalhes da cobrança</div>
+          <textarea class="cobranca-input" data-action="editCobranca" data-id="${op.id}" placeholder="Condições, vencimento, forma de pagamento, observações...">${escapeHtml(op.detalhesCobranca||'')}</textarea>
+        </div>
+        <div style="margin-top:12px;">
+          <div class="fiscal-meta" style="margin-bottom:2px;">Pedido de compra (anexo)</div>
+          ${anexosBlocoHtml(op, 'anexosPedidoCompra', 'addAnexoPedidoCompra', 'delAnexoPedidoCompra', 'Anexar pedido de compra', 'Nenhum pedido de compra anexado')}
+        </div>
+        <div style="margin-top:12px;">
+          <div class="fiscal-meta" style="margin-bottom:2px;">Nota fiscal (anexo)</div>
+          ${anexosBlocoHtml(op, 'anexosFiscais', 'addAnexoFiscal', 'delAnexoFiscal', 'Anexar nota fiscal', 'Nenhuma nota anexada')}
+        </div>
+        ${op.liberadoFiscal ? `<div style="margin-top:12px;">
+          <div class="fiscal-meta" style="margin-bottom:2px;">Notas de cobrança / boletos</div>
+          ${anexosBlocoHtml(op, 'anexosBoletos', 'addAnexoBoleto', 'delAnexoBoleto', 'Anexar cobrança/boleto', 'Nenhuma cobrança ou boleto anexado')}
+        </div>` : ''}
+        <div class="ped-actions" style="margin-top:12px;">${acaoPrincipal}<button class="mini-btn" data-action="detalhe" data-id="${op.id}">Ver roteiro</button></div>
+      </div>` : '';
+
+    return `
+    <div class="fiscal-row ${estado}">
+      <div class="fh-head">
+        <div class="fh-info">
+          <span class="op-num">${op.numero}</span>
+          <div class="prod">${escapeHtml(op.produto)}${op.cliente? ' · '+escapeHtml(op.cliente):''}</div>
+          <div style="margin-top:3px;">${selo}</div>
+        </div>
+        <div class="valor">${fmtCurrency(valorDisplay)}</div>
+        <button class="btn-mais ${aberto?'aberto':''}" data-action="toggleFiscal" data-id="${op.id}" title="Ver detalhes">${aberto?'−':'+'}</button>
       </div>
-      <div class="valor">${fmtCurrency(valorDisplay)}</div>
-      <div class="ped-actions">${extra}<button class="mini-btn" data-action="detalhe" data-id="${op.id}">Detalhes</button></div>
+      ${detalhe}
     </div>`;
   }
 
-  let html = '';
-  html += `<div class="fiscal-section-title">Pronto para faturar (${paraFaturar.length})</div>`;
-  html += paraFaturar.length ? paraFaturar.map(o=>rowHtml(o,'faturar')).join('') : `<div class="col-empty">Nenhum pedido concluído e liberado aguardando faturamento</div>`;
+  const vazioMsg = fiscalFilter==='liberados' ? 'Nenhum pedido liberado aguardando faturamento'
+    : fiscalFilter==='finalizados' ? 'Nenhum pedido faturado ainda'
+    : 'Nenhum pedido concluído aguardando liberação';
 
-  html += `<div class="fiscal-section-title">Faturados (${faturados.length})</div>`;
-  html += faturados.length ? faturados.map(o=>rowHtml(o,'faturado')).join('') : `<div class="col-empty">Nenhum pedido faturado ainda</div>`;
-
-  list.innerHTML = html;
-  list.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click', onCardAction));
+  list.innerHTML = grupo.length ? grupo.map(rowHtml).join('') : `<div class="col-empty">${vazioMsg}</div>`;
+  list.querySelectorAll('[data-action]').forEach(btn=>{
+    const act = btn.dataset.action;
+    if(act==='editCobranca'){
+      btn.addEventListener('change', onCardAction);
+    } else {
+      btn.addEventListener('click', onCardAction);
+    }
+  });
 }
 
 function estimateStorageUsage(){
@@ -2530,12 +2916,12 @@ function render(){
   else if(activeTab==='desenvolvimento') renderDesenvolvimento();
   else if(activeTab==='pedidos') renderPedidos();
   else if(activeTab==='orcamentos') renderOrcamentos();
-  else if(activeTab==='aguardcompra') renderAguardCompra();
   else if(activeTab==='fiscal') renderFiscal();
   else if(activeTab==='compras') renderCompras();
   else if(activeTab==='epi') renderEpi();
   else if(activeTab==='lembretes') renderLembretes();
   else if(activeTab==='config') renderConfig();
+  else if(activeTab==='retrabalho') renderRetrabalho();
   else renderClientes();
 }
 document.getElementById('btn-admin-toggle').addEventListener('click', async ()=>{
@@ -2688,28 +3074,28 @@ document.getElementById('btn-baixar-doc').addEventListener('click', ()=>{
   }
 });
 document.getElementById('btn-baixar-pdf').addEventListener('click', ()=>{
-  if(typeof html2pdf === 'undefined'){
-    showToast('Biblioteca de PDF não carregou. Verifique sua internet e recarregue a página.', 'error');
-    return;
-  }
   try{
-    const source = document.getElementById('print-preview-body');
-    const filename = currentPrintFilename.replace(/[^a-zA-Z0-9_\-]/g,'_') + '.pdf';
-    showToast('Gerando PDF...');
-    html2pdf().set({
-      margin: [10, 10, 10, 10],
-      filename: filename,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    }).from(source).save().then(()=>{
-      showToast('PDF gerado com sucesso!');
-    }).catch(()=>{
-      showToast('Não foi possível gerar o PDF.', 'error');
-    });
+    // Gera o PDF pela impressão nativa do navegador (confiável, layout perfeito).
+    // Abre o documento numa janela nova e dispara a impressão — o usuário escolhe
+    // "Salvar como PDF" no diálogo de impressão.
+    const allCss = Array.from(document.querySelectorAll('style')).map(s=>s.outerHTML).join('\n');
+    const fullHtml = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(currentPrintFilename)}</title>${allCss}<style>@media print{@page{margin:12mm;}} body{background:#fff;padding:0;margin:0;}</style></head><body style="background:#fff;padding:24px;">${currentPrintHtml}</body></html>`;
+    const win = window.open('', '_blank');
+    if(!win){
+      showToast('O navegador bloqueou a janela. Permita pop-ups para este site e tente de novo.', 'error');
+      return;
+    }
+    win.document.open();
+    win.document.write(fullHtml);
+    win.document.close();
+    // Espera o conteúdo (e o logo) carregar antes de imprimir.
+    setTimeout(()=>{
+      win.focus();
+      win.print();
+    }, 400);
+    showToast('Na janela de impressão, escolha "Salvar como PDF".');
   }catch(err){
-    showToast('Não foi possível gerar o PDF.', 'error');
+    showToast('Não foi possível abrir a impressão. Use o botão "Baixar arquivo".', 'error');
   }
 });
 
@@ -2717,11 +3103,13 @@ document.getElementById('btn-baixar-pdf').addEventListener('click', ()=>{
 function showToast(message, type){
   const container = document.getElementById('toast-container');
   const div = document.createElement('div');
-  div.className = 'toast' + (type==='error' ? ' error' : '');
+  div.className = 'toast' + (type==='error' ? ' error' : type==='ok' ? ' ok' : '');
   div.textContent = message;
   container.appendChild(div);
-  setTimeout(()=>{ div.remove(); }, 4000);
+  setTimeout(()=>{ div.remove(); }, type==='ok' ? 1800 : 4000);
 }
+// Confirmação curta e discreta de que a alteração foi gravada.
+function showSalvo(){ showToast('✓ Salvo', 'ok'); }
 function askText(title, message, defaultValue){
   return new Promise((resolve)=>{
     document.getElementById('dialog-title').textContent = title;
@@ -3027,6 +3415,37 @@ async function onCardAction(e){
   const id = e.currentTarget.dataset.id;
   const action = e.currentTarget.dataset.action;
 
+  // Admin define a cor de fundo do card SÓ para aquele setor.
+  if(action==='setCardCor'){
+    if(!isAdmin) return;
+    const op = ops.find(o=>o.id===id);
+    if(!op) return;
+    const setorNome = e.currentTarget.dataset.setor || '';
+    const cor = e.currentTarget.dataset.cor || '';
+    if(!op.coresPorSetor || typeof op.coresPorSetor !== 'object') op.coresPorSetor = {};
+    if(cor === '') delete op.coresPorSetor[setorNome];
+    else op.coresPorSetor[setorNome] = cor;
+    await persistOp(op);
+    render();
+    return;
+  }
+
+  // Abre/fecha o painel de detalhes do card (só visual, sem recarregar).
+  if(action==='toggleDetalhe'){
+    const target = e.currentTarget.dataset.target;
+    const alvo = document.getElementById(target);
+    if(alvo){
+      const abrir = alvo.style.display === 'none';
+      alvo.style.display = abrir ? '' : 'none';
+      e.currentTarget.classList.toggle('aberto', abrir);
+      e.currentTarget.textContent = abrir ? '−' : '+';
+      // Lembra o estado para que uma re-renderização não feche o card sozinho.
+      if(abrir) expandedCards.add(target);
+      else expandedCards.delete(target);
+    }
+    return;
+  }
+
   // ações em lote: carregam data-op + data-pecas (lista separada por vírgula, mesmo que com 1 só id)
   if(['iniciarLote','pausarLote','retomarLote','finalizarLote','filaUpLote','filaDownLote'].includes(action)){
     const op = ops.find(o=>o.id===e.currentTarget.dataset.op);
@@ -3106,6 +3525,32 @@ async function onCardAction(e){
 
   if(action==='detalhe'){
     openDetail(op);
+  } else if(action==='ajustarTempo'){
+    if(!isAdmin){ showToast('Apenas o administrador pode ajustar o tempo.', 'error'); return; }
+    const pecaId = e.currentTarget.dataset.peca;
+    const peca = op.pecas.find(p=>p.id===pecaId);
+    if(!peca){ showToast('Peça não encontrada.', 'error'); return; }
+    const step = peca.roteiro[peca.currentStepIndex];
+    if(!step){ showToast('Etapa não encontrada.', 'error'); return; }
+
+    const atualMs = stepTotalMs(step);
+    const h = Math.floor(atualMs/3600000);
+    const m = Math.round((atualMs%3600000)/60000);
+    const atualFmt = `${h}h${String(m).padStart(2,'0')}`;
+    const entrada = await askText('Ajustar tempo da etapa',
+      `Etapa ${step.setor} · ${peca.nome}\nTempo atual: ${atualFmt}\n\nDigite o tempo total correto (ex: 3h20, 3:20 ou 3.5):`, atualFmt);
+    if(entrada===null) return;
+
+    const novoMs = parseTempoParaMs(entrada);
+    if(novoMs===null){ showToast('Formato inválido. Use algo como 3h20, 3:20 ou 3.5.', 'error'); return; }
+
+    // Guarda o ajuste como a diferença entre o total desejado e o total bruto (sem ajuste).
+    const brutoAtual = (step.sessoes||[]).reduce((s,ss)=> s + ((ss.fim||Date.now()) - ss.inicio), 0);
+    step.ajusteMs = novoMs - brutoAtual;
+    await persistOp(op);
+    showToast(`Tempo ajustado para ${fmtDuration(novoMs)}.`, 'ok');
+    render();
+    if(!document.getElementById('overlay-detail').classList.contains('hidden') && detailId===op.id) openDetail(op);
   } else if(action==='editar'){
     openForm(op);
   } else if(action==='gerarOP'){
@@ -3197,9 +3642,9 @@ async function onCardAction(e){
     }
     await persistOp(op); render();
     if(!document.getElementById('overlay-detail').classList.contains('hidden') && detailId===op.id) openDetail(op);
-  } else if(action==='addAnexoFiscal' || action==='addAnexoPedidoCompra'){
-    const campo = action==='addAnexoFiscal' ? 'anexosFiscais' : 'anexosPedidoCompra';
-    const labelDoc = action==='addAnexoFiscal' ? 'documento fiscal' : 'pedido de compra / nota';
+  } else if(action==='addAnexoFiscal' || action==='addAnexoPedidoCompra' || action==='addAnexoBoleto'){
+    const campo = action==='addAnexoFiscal' ? 'anexosFiscais' : action==='addAnexoBoleto' ? 'anexosBoletos' : 'anexosPedidoCompra';
+    const labelDoc = action==='addAnexoFiscal' ? 'documento fiscal' : action==='addAnexoBoleto' ? 'cobrança / boleto' : 'pedido de compra / nota';
     const metodo = await askChoice(`Anexar ${labelDoc}`, 'Como você quer anexar?', [
       { label:'📎 Enviar arquivo do computador', value:'upload' },
       { label:'🔗 Colar link', value:'link' }
@@ -3227,15 +3672,25 @@ async function onCardAction(e){
       if(!op[campo]) op[campo] = [];
       op[campo].push({ id: genId(), name: nome.trim(), url: url.trim() });
     }
-    await persistOp(op); render();
+    await persistOp(op); showSalvo(); render();
     if(!document.getElementById('overlay-detail').classList.contains('hidden') && detailId===op.id) openDetail(op);
-  } else if(action==='delAnexoFiscal' || action==='delAnexoPedidoCompra'){
-    const campo = action==='delAnexoFiscal' ? 'anexosFiscais' : 'anexosPedidoCompra';
+  } else if(action==='delAnexoFiscal' || action==='delAnexoPedidoCompra' || action==='delAnexoBoleto'){
+    const campo = action==='delAnexoFiscal' ? 'anexosFiscais' : action==='delAnexoBoleto' ? 'anexosBoletos' : 'anexosPedidoCompra';
     const fileId = e.currentTarget.dataset.fileid;
     if(!(await askConfirm('Remover este documento?'))) return;
     op[campo] = (op[campo]||[]).filter(f=>f.id!==fileId);
     await persistOp(op); render();
     if(!document.getElementById('overlay-detail').classList.contains('hidden') && detailId===op.id) openDetail(op);
+  } else if(action==='toggleFiscal'){
+    // Abre/fecha o detalhe da linha fiscal, lembrando o estado.
+    if(expandedFiscal.has(op.id)) expandedFiscal.delete(op.id);
+    else expandedFiscal.add(op.id);
+    render();
+  } else if(action==='editCobranca'){
+    op.detalhesCobranca = e.currentTarget.value;
+    await persistOp(op);
+    showSalvo();
+    // sem render() para não perder o foco enquanto digita; o valor já está salvo
   } else if(action==='del'){
     if(await askConfirm(`Excluir o pedido ${op.numero} (${op.produto})? Esta ação não pode ser desfeita.`)){
       ops = ops.filter(o=>o.id!==id);
@@ -3775,7 +4230,7 @@ document.getElementById('op-form').addEventListener('submit', async (e)=>{
   render();
 });
 
-const TABS_RESTRITAS = ['pedidos','orcamentos','fiscal','aguardcompra','lembretes','config','clientes'];
+const TABS_RESTRITAS = ['pedidos','orcamentos','fiscal','lembretes','config','clientes','retrabalho'];
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click', async ()=>{
     const destino = tab.dataset.tab;
@@ -3790,13 +4245,13 @@ document.querySelectorAll('.tab').forEach(tab=>{
     document.getElementById('view-desenvolvimento').classList.toggle('hidden', activeTab!=='desenvolvimento');
     document.getElementById('view-pedidos').classList.toggle('hidden', activeTab!=='pedidos');
     document.getElementById('view-orcamentos').classList.toggle('hidden', activeTab!=='orcamentos');
-    document.getElementById('view-aguardcompra').classList.toggle('hidden', activeTab!=='aguardcompra');
     document.getElementById('view-fiscal').classList.toggle('hidden', activeTab!=='fiscal');
     document.getElementById('view-compras').classList.toggle('hidden', activeTab!=='compras');
     document.getElementById('view-epi').classList.toggle('hidden', activeTab!=='epi');
     document.getElementById('view-lembretes').classList.toggle('hidden', activeTab!=='lembretes');
     document.getElementById('view-clientes').classList.toggle('hidden', activeTab!=='clientes');
     document.getElementById('view-config').classList.toggle('hidden', activeTab!=='config');
+    document.getElementById('view-retrabalho').classList.toggle('hidden', activeTab!=='retrabalho');
     document.getElementById('pedidos-view-toggle').classList.toggle('hidden', activeTab!=='pedidos');
     document.getElementById('pedidos-status-toggle').classList.toggle('hidden', activeTab!=='pedidos');
     render();
@@ -3816,6 +4271,15 @@ document.querySelectorAll('#pedidos-status-toggle button').forEach(b=>{
     document.querySelectorAll('#pedidos-status-toggle button').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
     pedidosStatusFilter = b.dataset.status;
+    render();
+  });
+});
+
+document.querySelectorAll('#fiscal-filter-toggle button').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('#fiscal-filter-toggle button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    fiscalFilter = b.dataset.fiscal;
     render();
   });
 });
