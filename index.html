@@ -620,6 +620,19 @@ body{
         </div>
       </div>
 
+      <div class="field" id="pedido-anexos-fields">
+        <label>Pedido de compra e Nota fiscal (anexos)</label>
+        <div class="roteiro-builder">
+          <div class="file-hint" style="margin-bottom:8px;">Anexe o pedido de compra e/ou a nota fiscal já na criação — não precisa esperar o pedido ser finalizado. Pode enviar arquivo (até ~500KB) ou colar um link.</div>
+          <div style="margin-bottom:4px;font-size:12.5px;color:var(--text-dim);">Pedido de compra</div>
+          <div class="file-list" id="form-anexos-pc-list"><div class="file-empty">Nenhum pedido de compra anexado</div></div>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-form-add-pc" style="margin-top:6px;">📎 Anexar pedido de compra</button>
+          <div style="margin:12px 0 4px;font-size:12.5px;color:var(--text-dim);">Nota fiscal</div>
+          <div class="file-list" id="form-anexos-fiscal-list"><div class="file-empty">Nenhuma nota fiscal anexada</div></div>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-form-add-fiscal" style="margin-top:6px;">📎 Anexar nota fiscal</button>
+        </div>
+      </div>
+
       <div class="field">
         <label>Peças desta matriz</label>
         <div class="file-hint">Cada peça tem sua própria sequência de máquinas e progride de forma independente. <b>PROJETOS é adicionado automaticamente como a primeira etapa</b> de toda peça nova — é lá que os arquivos são conferidos e a OP é impressa antes de seguir para as máquinas.</div>
@@ -898,6 +911,8 @@ let builderMateriais = [];
 let activeTab = 'setores';
 let detailId = null;
 let formArquivos = [];
+let formAnexosPedidoCompra = [];
+let formAnexosFiscais = [];
 let removedFileIds = [];
 let pedidosViewMode = 'detalhada';
 let fiscalFilter = 'espera';
@@ -3272,6 +3287,7 @@ function buildOpDoc(op){
             : `<span class="pill pending">Aguardando</span>`;
       return `<tr>
         <td>${i+1}</td>
+        <td><b>${escapeHtml(peca.nome)}</b></td>
         <td>${escapeHtml(st.setor)}</td>
         <td>${statusCell}</td>
         <td>${totalMs>0 ? fmtDuration(totalMs) : '<span class="fill-line">&nbsp;</span>'}</td>
@@ -3282,7 +3298,7 @@ function buildOpDoc(op){
     <div class="peca-card">
       <h2>Peça: ${escapeHtml(peca.nome)} <span style="color:#999;font-weight:400;">(Qtd: ${peca.quantidade})</span></h2>
       <table>
-        <thead><tr><th>#</th><th>Setor</th><th>Status</th><th>Tempo</th><th>Responsável</th></tr></thead>
+        <thead><tr><th>#</th><th>Peça</th><th>Setor</th><th>Status</th><th>Tempo</th><th>Responsável</th></tr></thead>
         <tbody>${roteiroRows}</tbody>
       </table>
     </div>`;
@@ -3791,6 +3807,12 @@ function openDetail(op){
       </div>
       <div style="margin-top:6px;font-size:12.5px;color:var(--text-dim);">Total estimado: <b>${fmtCurrency(op.materiais.reduce((s,m)=>s+(m.quantidade||0)*(m.valorUnit||0),0))}</b></div>
     </div>` : ''}
+    <div class="field"><label>Pedido de compra (anexo)</label>
+      ${anexosBlocoHtml(op, 'anexosPedidoCompra', 'addAnexoPedidoCompra', 'delAnexoPedidoCompra', 'Anexar pedido de compra', 'Nenhum pedido de compra anexado')}
+    </div>
+    <div class="field"><label>Nota fiscal (anexo)</label>
+      ${anexosBlocoHtml(op, 'anexosFiscais', 'addAnexoFiscal', 'delAnexoFiscal', 'Anexar nota fiscal', 'Nenhuma nota fiscal anexada')}
+    </div>
     <div class="field"><label>Arquivos anexados</label>
       ${pastaRedeHtml(op.pastaRede)}
       <div class="file-list">
@@ -4063,6 +4085,63 @@ document.getElementById('f-pasta-picker').addEventListener('change', (e)=>{
   showToast('Confira o caminho: se a pasta estiver dentro de outra subpasta (ex: nome do cliente), complete manualmente.');
 });
 
+/* Anexos de pedido de compra / nota fiscal dentro do formulário de criação/edição.
+   Guardam em arrays temporários e são gravados no pedido ao salvar. */
+function renderFormAnexo(tipo){
+  const arr = tipo==='pc' ? formAnexosPedidoCompra : formAnexosFiscais;
+  const listId = tipo==='pc' ? 'form-anexos-pc-list' : 'form-anexos-fiscal-list';
+  const vazio = tipo==='pc' ? 'Nenhum pedido de compra anexado' : 'Nenhuma nota fiscal anexada';
+  const list = document.getElementById(listId);
+  if(!list) return;
+  if(arr.length===0){ list.innerHTML = `<div class="file-empty">${vazio}</div>`; return; }
+  list.innerHTML = arr.map(f=>`
+    <div class="file-item">
+      <span class="ic">${f.embutido?'📄':'🔗'}</span>
+      <span class="nm">${f.url? `<a href="${escapeHtml(f.url)}" target="_blank" rel="noopener" download="${escapeHtml(f.name)}" style="color:var(--blue)">${escapeHtml(f.name)}</a>` : escapeHtml(f.name)}</span>
+      <span class="sz">${f.embutido?'arquivo':'link'}</span>
+      <button type="button" class="rm" data-tipo="${tipo}" data-id="${f.id}">✕</button>
+    </div>`).join('');
+  list.querySelectorAll('.rm').forEach(b=>b.addEventListener('click', ()=>{
+    const t = b.dataset.tipo;
+    if(t==='pc') formAnexosPedidoCompra = formAnexosPedidoCompra.filter(f=>f.id!==b.dataset.id);
+    else formAnexosFiscais = formAnexosFiscais.filter(f=>f.id!==b.dataset.id);
+    renderFormAnexo(t);
+  }));
+}
+async function addFormAnexo(tipo){
+  const labelDoc = tipo==='pc' ? 'pedido de compra' : 'nota fiscal';
+  const metodo = await askChoice(`Anexar ${labelDoc}`, 'Como você quer anexar?', [
+    { label:'📎 Enviar arquivo do computador', value:'upload' },
+    { label:'🔗 Colar link', value:'link' }
+  ]);
+  if(!metodo) return;
+  let entry;
+  if(metodo==='upload'){
+    const file = await pickFile('.pdf,.jpg,.jpeg,.png');
+    if(!file) return;
+    if(file.size > 500*1024){
+      showToast(`"${file.name}" tem ${fmtSize(file.size)} — o máximo pra anexar direto é ~500KB. Para arquivos maiores, use a opção de link.`, 'error');
+      return;
+    }
+    let dataUrl;
+    try{ dataUrl = await readFileAsDataUrl(file); }
+    catch(err){ showToast('Não foi possível ler o arquivo.', 'error'); return; }
+    entry = { id: genId(), name: file.name, url: dataUrl, embutido: true };
+  } else {
+    const nome = await askText(`Anexar ${labelDoc}`, `Nome do documento:`, '');
+    if(nome===null || !nome.trim()){ if(nome!==null) showToast('Informe um nome para o documento.', 'error'); return; }
+    const url = await askText(`Anexar ${labelDoc}`, `Cole o link do arquivo (Google Drive, OneDrive, etc.):`, '');
+    if(url===null || !url.trim()){ if(url!==null) showToast('Cole o link do arquivo.', 'error'); return; }
+    if(!/^https?:\/\//i.test(url.trim())){ showToast('O link precisa começar com http:// ou https://', 'error'); return; }
+    entry = { id: genId(), name: nome.trim(), url: url.trim() };
+  }
+  if(tipo==='pc') formAnexosPedidoCompra.push(entry);
+  else formAnexosFiscais.push(entry);
+  renderFormAnexo(tipo);
+}
+document.getElementById('btn-form-add-pc').addEventListener('click', ()=>addFormAnexo('pc'));
+document.getElementById('btn-form-add-fiscal').addEventListener('click', ()=>addFormAnexo('fiscal'));
+
 function openForm(record, mode){
   formMode = mode || 'pedido';
   editingId = record ? record.id : null;
@@ -4096,6 +4175,12 @@ function openForm(record, mode){
   removedFileIds = [];
   renderFileList();
 
+  formAnexosPedidoCompra = record && record.anexosPedidoCompra ? record.anexosPedidoCompra.map(f=>({...f})) : [];
+  formAnexosFiscais = record && record.anexosFiscais ? record.anexosFiscais.map(f=>({...f})) : [];
+  document.getElementById('pedido-anexos-fields').style.display = formMode==='orcamento' ? 'none' : 'block';
+  renderFormAnexo('pc');
+  renderFormAnexo('fiscal');
+
   builderMateriais = record && record.materiais ? record.materiais.map(m=>({...m})) : [];
   renderMateriaisInto('materiais-container', builderMateriais);
 
@@ -4109,6 +4194,8 @@ function closeForm(){
   formMode = 'pedido';
   builderPecas = [];
   formArquivos = [];
+  formAnexosPedidoCompra = [];
+  formAnexosFiscais = [];
   removedFileIds = [];
 }
 
@@ -4220,6 +4307,8 @@ document.getElementById('op-form').addEventListener('submit', async (e)=>{
     const op = ops.find(o=>o.id===recordId);
     op.arquivos = formArquivos.map(f=>({ id:f.id, name:f.name, url:f.url, isLink:true }));
     op.materiais = builderMateriais.filter(m=>m.nome && m.nome.trim());
+    op.anexosPedidoCompra = formAnexosPedidoCompra.map(f=>({...f}));
+    op.anexosFiscais = formAnexosFiscais.map(f=>({...f}));
     await persistOp(op);
   }
 
